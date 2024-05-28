@@ -51,7 +51,7 @@ function Banner() {
   };
 
   return (
-    <Box sx={{ minWidth: 300, maxWidth: 800, flexGrow: 1, margin: '2rem auto' }}>
+    <Box sx={{ minWidth: 300, width: '100%', flexGrow: 1, margin: '2rem auto' }}>
 
       <AutoPlaySwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -66,8 +66,10 @@ function Banner() {
                 component="img"
                 sx={{
                   height: 'auto',
+                  maxHeight: 400,
                   display: 'block',
-                  maxWidth: 800,
+                  width: '100%',
+                  minWidth: 320,
                   overflow: 'hidden',
                   width: '100%',
                 }}
