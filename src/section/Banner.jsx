@@ -12,24 +12,30 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const images = [
   {
-    label: 'San Francisco – Oakland Bay Bridge, United States',
+    label: 'banner1',
     imgPath:
-      'https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60',
+      'src/assets/img/slider/img-1.jpg',
   },
   {
-    label: 'Bird',
+    label: 'banner2',
     imgPath:
-      'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
+      'src/assets/img/slider/img-2.jpg',
   },
   {
-    label: 'Bali, Indonesia',
+    label: 'banner3',
     imgPath:
-      'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250',
+      'src/assets/img/slider/img-3.jpg',
   },
   {
-    label: 'Goč, Serbia',
+    label: 'banner4',
     imgPath:
-      'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
+      'src/assets/img/slider/img-4.jpg',
+  },
+  
+  {
+    label: 'banner5',
+    imgPath:
+      'src/assets/img/slider/img-5.jpg',
   },
 ];
 
@@ -71,7 +77,7 @@ function Banner() {
                   width: '100%',
                   minWidth: 320,
                   overflow: 'hidden',
-                  width: '100%',
+                  objectFit: 'cover',
                 }}
                 src={step.imgPath}
                 alt={step.label}
