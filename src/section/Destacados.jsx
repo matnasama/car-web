@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { productos } from '../data/productos.json';
 
 export default function Destacados() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [maxScrollPosition, setMaxScrollPosition] = useState(0);
+  const [productPositions, setProductPositions] = useState([]);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -11,36 +13,61 @@ export default function Destacados() {
       const containerWidth = containerRef.current.offsetWidth;
       const contentWidth = containerRef.current.scrollWidth;
       setMaxScrollPosition(contentWidth - containerWidth);
+
+      // Calculate product positions
+      const positions = [];
+      const children = containerRef.current.children[0].children;
+      for (let i = 0; i < children.length; i++) {
+        positions.push(children[i].offsetLeft);
+      }
+      setProductPositions(positions);
     }
   }, []);
 
   const scrollLeft = () => {
-    setScrollPosition((prev) => Math.max(prev - 300, 0));
+    const currentIndex = productPositions.findIndex((pos) => pos === scrollPosition);
+    if (currentIndex > 0) {
+      setScrollPosition(productPositions[currentIndex - 1]);
+    }
   };
 
   const scrollRight = () => {
-    setScrollPosition((prev) => Math.min(prev + 300, maxScrollPosition));
+    const currentIndex = productPositions.findIndex((pos) => pos === scrollPosition);
+    if (currentIndex < productPositions.length - 1) {
+      setScrollPosition(productPositions[currentIndex + 1]);
+    } else if (currentIndex === productPositions.length - 1) {
+      // Align the last element perfectly to avoid large white space
+      setScrollPosition(maxScrollPosition);
+    }
   };
 
   return (
     <>
       <div className="container px-5 py-24 mx-auto max-w-7xl">
         <h2 className="text-3xl pb-10 font-bold tracking-tight text-gray-900 sm:text-4xl text-center">Nuestros autos</h2>
-        <div className="relative flex items-center">
-          <button
+        <button
             onClick={scrollLeft}
-            className="absolute left-0 z-10 p-2 bg-gray-400 rounded-10 hover:bg-gray-300 disabled:opacity-50"
             disabled={scrollPosition === 0}
+            className={`absolute h-3/6 left-0 z-10 p-2 bg-gray-400 rounded-10 hover:bg-gray-300 disabled:opacity-50 ${scrollPosition === 0 ? 'opacity-50' : ''}`}
           >
-            &#8592;
+            <ChevronLeftIcon className="w-6 h-6" />
           </button>
-          <div className="flex overflow-hidden w-11/12 mx-auto" ref={containerRef}>
+          <button
+            onClick={scrollRight}
+            disabled={scrollPosition >= maxScrollPosition || scrollPosition >= productPositions[productPositions.length - 1]}
+            className={`absolute h-3/6 right-0 z-10 p-2 bg-gray-400 rounded-10 hover:bg-gray-300 disabled:opacity-50 ${scrollPosition >= maxScrollPosition ? 'opacity-50' : ''}`}
+          >
+            <ChevronRightIcon className="w-6 h-6" />
+          </button>
+        <div className="relative flex items-center">
+
+          <div className="flex overflow-hidden mx-auto" ref={containerRef}>
             <div
               className="flex transition-transform duration-300 gap-4"
               style={{ transform: `translateX(-${scrollPosition}px)` }}
             >
               {productos.slice(0, 8).map((producto) => (
-                <div key={producto.id} className="flex-shrink-0 w-60 mx-2 cursor-pointer rounded-lg bg-white p-2 shadow hover:shadow-md">
+                <div key={producto.id} className="flex-shrink-0 w-60 mx-2 cursor-pointer rounded-lg bg-blue-900/[.04] p-2">
                   <div>
                     <img className="w-full h-36 rounded-lg object-cover object-center" src={producto.img} alt={producto.nombre} />
                   </div>
@@ -61,9 +88,8 @@ export default function Destacados() {
                       <p className="rounded-full bg-blue-500 px-2 py-0.5 text-xs font-semibold text-white">{producto.precio}</p>
                     </div>
                     <div className="my-4 flex items-center justify-between px-4">
-                      <p className="text-sm font-semibold text-gray-500">
+                      <p className="text-sm font-semibold text-blue-500">
                         <a href={producto.url}>
-                          <span aria-hidden="true" className="absolute inset-0" />
                           Ver más
                         </a>
                       </p>
@@ -76,13 +102,7 @@ export default function Destacados() {
               </div>
             </div>
           </div>
-          <button
-            onClick={scrollRight}
-            className="absolute right-0 z-10 p-2 bg-gray-400 rounded-10 hover:bg-gray-300 disabled:opacity-50"
-            disabled={scrollPosition >= maxScrollPosition}
-          >
-            &#8594;
-          </button>
+
         </div>
       </div>
     </>

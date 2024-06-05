@@ -13,29 +13,23 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const images = [
   {
     label: 'banner1',
-    imgPath:
-      'src/assets/img/slider/img-1.jpg',
+    imgPath: 'src/assets/img/slider/img-1.jpg',
   },
   {
     label: 'banner2',
-    imgPath:
-      'src/assets/img/slider/img-2.jpg',
+    imgPath: 'src/assets/img/slider/img-2.jpg',
   },
   {
     label: 'banner3',
-    imgPath:
-      'src/assets/img/slider/img-3.jpg',
+    imgPath: 'src/assets/img/slider/img-3.jpg',
   },
   {
     label: 'banner4',
-    imgPath:
-      'src/assets/img/slider/img-4.jpg',
+    imgPath: 'src/assets/img/slider/img-4.jpg',
   },
-  
   {
     label: 'banner5',
-    imgPath:
-      'src/assets/img/slider/img-5.jpg',
+    imgPath: 'src/assets/img/slider/img-5.jpg',
   },
 ];
 
@@ -45,11 +39,11 @@ function Banner() {
   const maxSteps = images.length;
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setActiveStep((prevActiveStep) => (prevActiveStep + 1) % maxSteps);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    setActiveStep((prevActiveStep) => (prevActiveStep - 1 + maxSteps) % maxSteps);
   };
 
   const handleStepChange = (step) => {
@@ -57,8 +51,7 @@ function Banner() {
   };
 
   return (
-    <Box sx={{ minWidth: 300, width: '100%', flexGrow: 1, margin: '2rem auto' }}>
-
+    <Box sx={{ minWidth: 300, width: '100%', flexGrow: 1, margin: '2rem auto', position: 'relative' }}>
       <AutoPlaySwipeableViews
         axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={activeStep}
@@ -86,34 +79,51 @@ function Banner() {
           </div>
         ))}
       </AutoPlaySwipeableViews>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: 0,
+          right: 0,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          transform: 'translateY(-50%)',
+          px: 2,
+        }}
+      >
+        <Button
+          size="small"
+          onClick={handleBack}
+          sx={{
+            color: 'white',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            },
+          }}
+        >
+          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        </Button>
+        <Button
+          size="small"
+          onClick={handleNext}
+          sx={{
+            color: 'white',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            },
+          }}
+        >
+          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        </Button>
+      </Box>
       <MobileStepper
         steps={maxSteps}
         position="static"
         activeStep={activeStep}
-        nextButton={
-          <Button
-            size="small"
-            onClick={handleNext}
-            disabled={activeStep === maxSteps - 1}
-          >
-            
-            {theme.direction === 'rtl' ? (
-              <KeyboardArrowLeft />
-            ) : (
-              <KeyboardArrowRight />
-            )}
-          </Button>
-        }
-        backButton={
-          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-            {theme.direction === 'rtl' ? (
-              <KeyboardArrowRight />
-            ) : (
-              <KeyboardArrowLeft />
-            )}
-            
-          </Button>
-        }
+        sx={{ display: 'none' }} // Hide the default stepper
       />
     </Box>
   );
