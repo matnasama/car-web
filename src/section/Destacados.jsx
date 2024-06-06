@@ -45,21 +45,15 @@ export default function Destacados() {
     <>
       <div className="container px-5 py-24 mx-auto max-w-7xl">
         <h2 className="text-3xl pb-10 font-bold tracking-tight text-gray-900 sm:text-4xl text-center">Nuestros autos</h2>
-        <button
+
+        <div className="relative flex items-center">
+          <button
             onClick={scrollLeft}
             disabled={scrollPosition === 0}
-            className={`absolute h-3/6 left-0 z-10 p-2 bg-gray-400 rounded-10 hover:bg-gray-300 disabled:opacity-50 ${scrollPosition === 0 ? 'opacity-50' : ''}`}
+            className={`absolute -left-5 z-10 p-2 bg-gray-400 rounded-10 hover:bg-gray-300 disabled:opacity-50 ${scrollPosition === 0 ? 'opacity-50' : ''}`}
           >
             <ChevronLeftIcon className="w-6 h-6" />
           </button>
-          <button
-            onClick={scrollRight}
-            disabled={scrollPosition >= maxScrollPosition || scrollPosition >= productPositions[productPositions.length - 1]}
-            className={`absolute h-3/6 right-0 z-10 p-2 bg-gray-400 rounded-10 hover:bg-gray-300 disabled:opacity-50 ${scrollPosition >= maxScrollPosition ? 'opacity-50' : ''}`}
-          >
-            <ChevronRightIcon className="w-6 h-6" />
-          </button>
-        <div className="relative flex items-center">
 
           <div className="flex overflow-hidden mx-auto" ref={containerRef}>
             <div
@@ -102,7 +96,13 @@ export default function Destacados() {
               </div>
             </div>
           </div>
-
+          <button
+            onClick={scrollRight}
+            disabled={scrollPosition >= maxScrollPosition || scrollPosition >= productPositions[productPositions.length - 1]}
+            className={`absolute -right-5 z-10 p-2 bg-gray-400 rounded-10 hover:bg-gray-300 disabled:opacity-50 ${scrollPosition >= maxScrollPosition ? 'opacity-50' : ''}`}
+          >
+            <ChevronRightIcon className="w-6 h-6" />
+          </button>
         </div>
       </div>
     </>
